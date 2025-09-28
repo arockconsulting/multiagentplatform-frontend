@@ -6,8 +6,12 @@ import styled from 'styled-components';
  */
 export const PricingSectionContainer = styled.section`
   padding: 4rem 0;
-  text-align: center;
   background-color: #f9f9f9;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
 `;
 
 /**
@@ -17,16 +21,23 @@ export const PricingSectionTitle = styled.h2`
   font-size: 2.5rem;
   margin-bottom: 2rem;
   color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 /**
- * Estilos para o contêiner dos planos de preços.
+ * Estilos para o container dos planos de preços.
  */
 export const PricingPlansContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 2rem;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -44,10 +55,15 @@ export const PricingPlanCard = styled.div`
   padding: 2rem;
   width: 300px;
   text-align: left;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 400px;
   }
 `;
 
@@ -76,7 +92,7 @@ export const PricingPlanPrice = styled.div`
 export const PricingPlanFeatures = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-bottom: 1.5rem;
 `;
 
 /**
@@ -94,13 +110,12 @@ export const PricingPlanButton = styled.button`
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 0.75rem 1.5rem;
   border-radius: 4px;
-  cursor: pointer;
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   width: 100%;
-  margin-top: 1rem;
 
   &:hover {
     background-color: #0056b3;

@@ -1,75 +1,38 @@
 ```typescript
 import styles from './TestimonialsSection.module.css';
-import React from 'react';
 
 /**
- * Interface for the Testimonial component props.
- */
-interface TestimonialProps {
-  /**
-   * The name of the person giving the testimonial.
-   */
-  name: string;
-  /**
-   * The role or title of the person giving the testimonial.
-   */
-  title: string;
-  /**
-   * The testimonial text.
-   */
-  testimonial: string;
-  /**
-   * The URL of the person's image.
-   */
-  imageUrl: string;
-}
-
-/**
- * Testimonial component to display a single testimonial.
- *
- * @param {TestimonialProps} props - The props for the Testimonial component.
- * @returns {JSX.Element} - The rendered Testimonial component.
- */
-const Testimonial: React.FC<TestimonialProps> = ({ name, title, testimonial, imageUrl }) => {
-  return (
-    <div className={styles.testimonial}>
-      <img src={imageUrl} alt={name} className={styles.testimonialImage} />
-      <div className={styles.testimonialContent}>
-        <p className={styles.testimonialText}>"{testimonial}"</p>
-        <div className={styles.testimonialAuthor}>
-          <p className={styles.authorName}>{name}</p>
-          <p className={styles.authorTitle}>{title}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-
-/**
- * Interface for the TestimonialsSection component props.
+ * Interface para as propriedades do componente TestimonialsSection.
  */
 interface TestimonialsSectionProps {
-  /**
-   * An array of testimonial objects.
-   */
-  testimonials: TestimonialProps[];
+  testimonials: {
+    id: number;
+    name: string;
+    title: string;
+    text: string;
+    image: string;
+  }[];
 }
 
-
 /**
- * TestimonialsSection component to display a list of testimonials.
- *
- * @param {TestimonialsSectionProps} props - The props for the TestimonialsSection component.
- * @returns {JSX.Element} - The rendered TestimonialsSection component.
+ * Componente React para exibir uma seção de depoimentos.
+ * @param {TestimonialsSectionProps} props - As propriedades do componente.
+ * @returns {JSX.Element} O elemento JSX que representa a seção de depoimentos.
  */
 const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials }) => {
   return (
     <section className={styles.testimonialsSection}>
-      <h2>What Our Clients Say</h2>
+      <h2 className={styles.sectionTitle}>O que nossos clientes dizem</h2>
       <div className={styles.testimonialsContainer}>
-        {testimonials.map((testimonial, index) => (
-          <Testimonial key={index} {...testimonial} />
+        {testimonials.map((testimonial) => (
+          <div key={testimonial.id} className={styles.testimonialCard}>
+            <img src={testimonial.image} alt={`Foto de ${testimonial.name}`} className={styles.testimonialImage} />
+            <div className={styles.testimonialContent}>
+              <p className={styles.testimonialText}>"{testimonial.text}"</p>
+              <p className={styles.testimonialName}>{testimonial.name}</p>
+              <p className={styles.testimonialTitle}>{testimonial.title}</p>
+            </div>
+          </div>
         ))}
       </div>
     </section>
@@ -79,85 +42,80 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
 export default TestimonialsSection;
 ```
 ```typescript
-/* stylelint-disable dublicate-selectors */
+/* TestimonialsSection.module.css */
+
 .testimonialsSection {
-  padding: 4rem 2rem;
+  padding: 40px;
   background-color: #f9f9f9;
   text-align: center;
 }
 
-.testimonialsSection h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+.sectionTitle {
+  font-size: 2rem;
+  margin-bottom: 30px;
   color: #333;
 }
 
 .testimonialsContainer {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
-.testimonial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
+.testimonialCard {
   background-color: #fff;
   border-radius: 8px;
+  padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 600px;
+  text-align: left;
+  width: 300px; /* Largura base para telas maiores */
 }
 
 .testimonialImage {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
   object-fit: cover;
 }
 
 .testimonialContent {
-  text-align: center;
+  /* Estilos para o conteúdo do depoimento */
 }
 
 .testimonialText {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-.testimonialAuthor {
   font-style: italic;
+  color: #555;
+  margin-bottom: 10px;
 }
 
-.authorName {
+.testimonialName {
   font-weight: bold;
   color: #333;
 }
 
-.authorTitle {
+.testimonialTitle {
   color: #777;
+  font-size: 0.9rem;
 }
 
-@media (min-width: 768px) {
+/* Media query para telas menores (ex: mobile) */
+@media (max-width: 768px) {
+  .testimonialCard {
+    width: 100%; /* Ocupa a largura total em telas menores */
+  }
+
   .testimonialsContainer {
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .testimonial {
-    width: 45%;
-    max-width: 400px;
+    flex-direction: column; /* Empilha os cards em telas menores */
+    align-items: center; /* Centraliza os itens */
   }
 }
 
-@media (min-width: 1200px) {
-  .testimonial {
-    width: 30%;
+/* Media query para telas médias (ex: tablets) */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .testimonialCard {
+    width: 45%; /* Ocupa quase metade da largura em telas médias */
   }
 }
 ```

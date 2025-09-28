@@ -1,93 +1,120 @@
 ```typescript
-import styles from './HeroSection.module.css';
+import styled from 'styled-components';
 
 /**
- * Interface para as propriedades do componente HeroSection.
+ * HeroSectionWrapper: Wrapper para a seção Hero, contendo a imagem de fundo e o conteúdo.
  */
-interface HeroSectionProps {
-  title: string;
-  description: string;
-  imageUrl: string;
-  imageAlt: string;
-}
-
-/**
- * Componente HeroSection que exibe o título, descrição e imagem principal da página inicial.
- *
- * @param {HeroSectionProps} props - As propriedades do componente.
- * @returns {JSX.Element} O componente HeroSection.
- */
-const HeroSection: React.FC<HeroSectionProps> = ({ title, description, imageUrl, imageAlt }) => {
-  return (
-    <section className={styles.heroSection}>
-      <div className={styles.heroContent}>
-        <h1 className={styles.heroTitle}>{title}</h1>
-        <p className={styles.heroDescription}>{description}</p>
-      </div>
-      <div className={styles.heroImageContainer}>
-        <img src={imageUrl} alt={imageAlt} className={styles.heroImage} />
-      </div>
-    </section>
-  );
-};
-
-export default HeroSection;
-```
-```typescript
-// src/components/HeroSection.module.css
-.heroSection {
+export const HeroSectionWrapper = styled.section`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 4rem 2rem;
-  background-color: #f0f0f0;
-}
-
-.heroContent {
+  justify-content: center;
   text-align: center;
-  margin-bottom: 2rem;
-}
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/images/hero-background.jpg'); // Substitua pelo caminho da sua imagem
+  background-size: cover;
+  background-position: center;
+  color: white;
 
-.heroTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #333;
-}
+  @media (max-width: 768px) {
+    height: 80vh;
+  }
+`;
 
-.heroDescription {
-  font-size: 1.2rem;
-  color: #666;
-  line-height: 1.5;
-}
+/**
+ * HeroContent: Contém o texto e os botões da seção Hero.
+ */
+export const HeroContent = styled.div`
+  max-width: 800px;
+  padding: 20px;
+  z-index: 1;
 
-.heroImageContainer {
-  width: 100%;
-  max-width: 500px;
-}
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
-.heroImage {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
 
-@media (min-width: 768px) {
-  .heroSection {
-    flex-direction: row;
-    justify-content: space-around;
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+`;
+
+/**
+ * ButtonContainer: Contêiner para os botões.
+ */
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
     align-items: center;
   }
+`;
 
-  .heroContent {
-    text-align: left;
-    max-width: 50%;
-    margin-bottom: 0;
+/**
+ * HeroButton: Estilo base para os botões.
+ */
+export const HeroButton = styled.a`
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    opacity: 0.8;
   }
 
-  .heroImageContainer {
-    max-width: 40%;
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: center;
   }
-}
+`;
+
+/**
+ * PrimaryButton: Estilo para o botão primário.
+ */
+export const PrimaryButton = styled(HeroButton)`
+  background-color: #007bff;
+  color: white;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+/**
+ * SecondaryButton: Estilo para o botão secundário.
+ */
+export const SecondaryButton = styled(HeroButton)`
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid white;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+`;
 ```

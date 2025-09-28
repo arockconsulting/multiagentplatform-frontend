@@ -1,178 +1,76 @@
 ```typescript
-// src/components/Header.styles.ts
-import styled from 'styled-components';
+import { css } from '@emotion/react';
 
 /**
- * Header container.
+ * Styles for the Header component.
  */
-export const HeaderContainer = styled.header`
+export const headerStyles = css`
   background-color: #f0f0f0;
-  padding: 1rem 2rem;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
 /**
- * Logo container.
+ * Styles for the logo container.
  */
-export const LogoContainer = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-
-  @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-`;
-
-/**
- * Navigation list.
- */
-export const NavList = styled.ul`
-  list-style: none;
+export const logoContainerStyles = css`
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
 
   @media (max-width: 768px) {
-    gap: 1rem;
+    margin-bottom: 10px;
   }
 `;
 
 /**
- * Navigation item.
+ * Styles for the navigation links.
  */
-export const NavItem = styled.li`
-  a {
-    text-decoration: none;
-    color: #555;
-    font-weight: 500;
+export const navStyles = css`
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
 
-    &:hover {
-      color: #007bff;
+    li {
+      a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+
+        &:hover {
+          color: #007bff;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    ul {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
   }
 `;
-
-/**
- * Action button.
- */
-export const ActionButton = styled.button`
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-`;
-```
-```typescript
-// src/components/Header.tsx
-import React from 'react';
-import * as S from './Header.styles';
-
-/**
- * Header Props interface.
- */
-interface HeaderProps {
-  logo: string;
-  navItems: { id: string; label: string; href: string }[];
-  actionButtonLabel: string;
-  onActionClick: () => void;
-}
-
-/**
- * Header component for the landing page.
- * @param {HeaderProps} props - The props for the Header component.
- * @returns {JSX.Element} The Header component.
- */
-const Header: React.FC<HeaderProps> = ({ logo, navItems, actionButtonLabel, onActionClick }) => {
-  return (
-    <S.HeaderContainer>
-      <S.LogoContainer>{logo}</S.LogoContainer>
-      <nav>
-        <S.NavList>
-          {navItems.map((item) => (
-            <S.NavItem key={item.id}>
-              <a href={item.href}>{item.label}</a>
-            </S.NavItem>
-          ))}
-        </S.NavList>
-      </nav>
-      <S.ActionButton onClick={onActionClick}>{actionButtonLabel}</S.ActionButton>
-    </S.HeaderContainer>
-  );
-};
-
-export default Header;
-```
-```typescript
-// src/types/index.ts
-
-export interface NavItem {
-    id: string;
-    label: string;
-    href: string;
-}
-```
-```typescript
-// src/App.tsx
-import React from 'react';
-import Header from './components/Header';
-import { createGlobalStyle } from 'styled-components';
-import { NavItem } from './types';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-  }
-`;
-
-const navItems: NavItem[] = [
-  { id: 'home', label: 'Home', href: '/' },
-  { id: 'features', label: 'Features', href: '/features' },
-  { id: 'pricing', label: 'Pricing', href: '/pricing' },
-  { id: 'contact', label: 'Contact', href: '/contact' },
-];
-
-function App() {
-  const handleActionClick = () => {
-    alert('Action button clicked!');
-  };
-
-  return (
-    <>
-      <GlobalStyle />
-      <Header
-        logo="My Awesome App"
-        navItems={navItems}
-        actionButtonLabel="Get Started"
-        onActionClick={handleActionClick}
-      />
-      <main>
-        <h1>Welcome to my awesome app!</h1>
-      </main>
-    </>
-  );
-}
-
-export default App;
 ```

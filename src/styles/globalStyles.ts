@@ -14,109 +14,83 @@ export interface ThemeProps {
     accent: string;
   };
   fonts: {
-    primary: string;
+    main: string;
     secondary: string;
   };
   breakpoints: {
-    mobile: string;
-    tablet: string;
-    desktop: string;
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
   };
 }
 
 /**
- * Tema padrão da aplicação.
+ * Tema padrão para a aplicação.
  */
 export const defaultTheme: ThemeProps = {
   colors: {
     primary: '#007bff',
     secondary: '#6c757d',
     background: '#f8f9fa',
-    text: '#343a40',
+    text: '#212529',
     accent: '#ffc107',
   },
   fonts: {
-    primary: 'Arial, sans-serif',
+    main: 'Arial, sans-serif',
     secondary: 'Helvetica, sans-serif',
   },
   breakpoints: {
-    mobile: '576px',
-    tablet: '768px',
-    desktop: '992px',
+    xs: '0px',
+    sm: '576px',
+    md: '768px',
+    lg: '992px',
+    xl: '1200px',
   },
 };
 
 /**
- * Estilos globais da aplicação.
- * Define fontes, cores e reset de estilos.
+ * Estilos globais para a aplicação.
+ * Define a fonte padrão, reseta margens e paddings, e aplica o background.
  */
 const GlobalStyle = createGlobalStyle<{ theme: ThemeProps }>`
-  /* Reseta estilos padrões do navegador */
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
-  dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed,
-  figure, figcaption, footer, header, hgroup,
-  menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-  }
-
-  /* HTML5 display-role reset for older browsers */
-  article, aside, details, figcaption, figure,
-  footer, header, hgroup, menu, nav, section {
-    display: block;
-  }
-
-  body {
-    line-height: 1;
-    font-family: ${(props) => props.theme.fonts.primary};
-    background-color: ${(props) => props.theme.colors.background};
-    color: ${(props) => props.theme.colors.text};
-  }
-
-  ol, ul {
-    list-style: none;
-  }
-
-  blockquote, q {
-    quotes: none;
-  }
-
-  blockquote:before, blockquote:after,
-  q:before, q:after {
-    content: '';
-    content: none;
-  }
-
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-
-  /* Estilos gerais */
   *, *::before, *::after {
     box-sizing: border-box;
   }
 
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: ${({ theme }) => theme.fonts.main};
+    background-color: ${({ theme }) => theme.colors.background};
+    color: ${({ theme }) => theme.colors.text};
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
   a {
-    color: ${(props) => props.theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
 
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  button {
+    cursor: pointer;
   }
 `;
 
