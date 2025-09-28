@@ -18,271 +18,290 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
-      "*": ["*"]
+      "*": ["./*"]
     }
   },
   "include": ["src"],
   "exclude": ["node_modules"]
 }
 ```
+
 ```typescript
 // src/components/Button/Button.tsx
 import React from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
-  /** The text to display in the button. */
+  /**
+   * Button text
+   */
   children: React.ReactNode;
-  /** Optional click handler. */
+  /**
+   * Optional click handler
+   */
   onClick?: () => void;
-  /** Optional styling variants. */
-  variant?: 'primary' | 'secondary';
-  /** Optional ARIA label for accessibility. */
+  /**
+   * Is this the principal call to action on the page?
+   */
+  primary?: boolean;
+  /**
+   * How large should the button be?
+   */
+  size?: 'small' | 'medium' | 'large';
+  /**
+   * Optional CSS class name
+   */
+  className?: string;
+  /**
+   *  Is the button disabled?
+   */
+  disabled?: boolean;
+  /**
+   * Aria label for accessibility
+   */
   ariaLabel?: string;
 }
 
-const StyledButton = styled.button<ButtonProps>`
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-
-  ${(props) =>
-    props.variant === 'primary' &&
-    `
-      background-color: #007bff;
-      color: white;
-
-      &:hover {
-        background-color: #0056b3;
-      }
-    `}
-
-  ${(props) =>
-    props.variant === 'secondary' &&
-    `
-      background-color: #6c757d;
-      color: white;
-
-      &:hover {
-        background-color: #5a6268;
-      }
-    `}
-`;
-
 /**
- * A reusable button component.
+ * Primary UI component for user interaction
  */
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
-  variant = 'primary',
+  primary = false,
+  size = 'medium',
+  className,
+  disabled = false,
   ariaLabel,
 }) => {
   return (
-    <StyledButton onClick={onClick} variant={variant} aria-label={ariaLabel}>
+    <StyledButton
+      type="button"
+      onClick={onClick}
+      primary={primary}
+      size={size}
+      className={className}
+      disabled={disabled}
+      aria-label={ariaLabel}
+    >
       {children}
     </StyledButton>
   );
 };
 
-export default Button;
+const StyledButton = styled.button<{ primary: boolean; size: string }>`
+  background-color: ${(props) => (props.primary ? '#007bff' : 'white')};
+  color: ${(props) => (props.primary ? 'white' : '#007bff')};
+  font-size: ${(props) => {
+    switch (props.size) {
+      case 'small':
+        return '14px';
+      case 'large':
+        return '20px';
+      default:
+        return '16px';
+    }
+  }};
+  padding: ${(props) => {
+    switch (props.size) {
+      case 'small':
+        return '6px 12px';
+      case 'large':
+        return '12px 24px';
+      default:
+        return '8px 16px';
+    }
+  }};
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.primary ? '#0056b3' : '#f0f0f0')};
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    border-color: #999999;
+    cursor: not-allowed;
+  }
+`;
 ```
+
 ```typescript
 // src/components/Hero/Hero.tsx
 import React from 'react';
 import styled from 'styled-components';
+import { Button } from 'components/Button/Button';
 
 interface HeroProps {
-  /** The title of the hero section. */
+  /**
+   * Title of the hero section
+   */
   title: string;
-  /** The subtitle or description of the hero section. */
-  subtitle: string;
-  /** Optional background image URL. */
-  backgroundImage?: string;
+  /**
+   * Description of the hero section
+   */
+  description: string;
+  /**
+   * Button label
+   */
+  buttonLabel: string;
+  /**
+   * Button onClick handler
+   */
+  onButtonClick: () => void;
 }
 
-const HeroContainer = styled.div<HeroProps>`
-  background-image: ${(props) =>
-    props.backgroundImage ? `url(${props.backgroundImage})` : 'none'};
-  background-size: cover;
-  background-position: center;
-  color: white;
-  text-align: center;
-  padding: 100px 20px;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Optional overlay */
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 3em;
-  margin-bottom: 20px;
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.5em;
-  margin-bottom: 30px;
-`;
-
 /**
- * A hero section component for landing pages.
+ * Hero section component
  */
-const Hero: React.FC<HeroProps> = ({ title, subtitle, backgroundImage }) => {
+export const Hero: React.FC<HeroProps> = ({ title, description, buttonLabel, onButtonClick }) => {
   return (
-    <HeroContainer backgroundImage={backgroundImage}>
-      <Title>{title}</Title>
-      <Subtitle>{subtitle}</Subtitle>
-    </HeroContainer>
+    <StyledHero>
+      <HeroContent>
+        <Title>{title}</Title>
+        <Description>{description}</Description>
+        <Button primary onClick={onButtonClick} ariaLabel="Learn More">
+          {buttonLabel}
+        </Button>
+      </HeroContent>
+    </StyledHero>
   );
 };
 
-export default Hero;
+const StyledHero = styled.section`
+  background-color: #f8f9fa;
+  padding: 80px 0;
+  text-align: center;
+`;
+
+const HeroContent = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: #343a40;
+`;
+
+const Description = styled.p`
+  font-size: 1.25rem;
+  color: #6c757d;
+  margin-bottom: 30px;
+`;
 ```
+
 ```typescript
 // src/components/Feature/Feature.tsx
 import React from 'react';
 import styled from 'styled-components';
 
 interface FeatureProps {
-  /** The title of the feature. */
+  /**
+   * Feature title
+   */
   title: string;
-  /** The description of the feature. */
+  /**
+   * Feature description
+   */
   description: string;
-  /** Optional icon or image URL. */
-  icon?: string;
+  /**
+   * Feature icon (e.g., FontAwesome icon name)
+   */
+  icon?: React.ReactNode;
 }
 
-const FeatureContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin: 10px;
-`;
-
-const Icon = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
-`;
-
-const Title = styled.h3`
-  font-size: 1.5em;
-  margin-bottom: 10px;
-`;
-
-const Description = styled.p`
-  font-size: 1em;
-`;
-
 /**
- * A feature component for highlighting key features.
+ * Feature component
  */
-const Feature: React.FC<FeatureProps> = ({ title, description, icon }) => {
+export const Feature: React.FC<FeatureProps> = ({ title, description, icon }) => {
   return (
-    <FeatureContainer>
-      {icon && <Icon src={icon} alt={title} />}
+    <StyledFeature>
+      {icon && <IconContainer>{icon}</IconContainer>}
       <Title>{title}</Title>
       <Description>{description}</Description>
-    </FeatureContainer>
+    </StyledFeature>
   );
 };
 
-export default Feature;
+const StyledFeature = styled.div`
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  margin-bottom: 20px;
+`;
+
+const IconContainer = styled.div`
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #007bff;
+`;
+
+const Title = styled.h3`
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #343a40;
+`;
+
+const Description = styled.p`
+  font-size: 1rem;
+  color: #6c757d;
+`;
 ```
+
 ```typescript
 // src/components/Footer/Footer.tsx
 import React from 'react';
 import styled from 'styled-components';
 
-const FooterContainer = styled.footer`
-  background-color: #343a40;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9em;
-`;
+interface FooterProps {
+  /**
+   * Copyright text
+   */
+  copyright: string;
+}
 
 /**
- * A simple footer component.
+ * Footer component
  */
-const Footer: React.FC = () => {
+export const Footer: React.FC<FooterProps> = ({ copyright }) => {
   return (
-    <FooterContainer>
-      &copy; {new Date().getFullYear()} My Company. All rights reserved.
-    </FooterContainer>
+    <StyledFooter>
+      <Copyright>{copyright}</Copyright>
+    </StyledFooter>
   );
 };
 
-export default Footer;
-```
-```typescript
-// src/App.tsx
-import React from 'react';
-import styled from 'styled-components';
-import Hero from 'components/Hero/Hero';
-import Feature from 'components/Feature/Feature';
-import Footer from 'components/Footer/Footer';
-import Button from 'components/Button/Button';
-
-const AppContainer = styled.div`
-  font-family: sans-serif;
-`;
-
-const FeaturesSection = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+const StyledFooter = styled.footer`
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
   padding: 20px;
 `;
 
-const StyledButton = styled(Button)`
-  margin-top: 20px;
+const Copyright = styled.p`
+  font-size: 1rem;
 `;
+```
 
-/**
- * The main application component.
- */
-const App: React.FC = () => {
-  return (
-    <AppContainer>
-      <Hero
-        title="Welcome to Our Awesome Product"
-        subtitle="The best solution for your needs."
-        backgroundImage="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-      />
+```typescript
+// src/App.tsx
+import React from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import { Hero } from 'components/Hero/Hero';
+import { Feature } from 'components/Feature/Feature';
+import { Footer } from 'components/Footer/Footer';
 
-      <FeaturesSection>
-        <Feature
-          title="Feature 1"
-          description="This is the first amazing feature."
-          icon="https://via.placeholder.com/50"
-        />
-        <Feature
-          title="Feature 2"
-          description="This is the second amazing feature."
-          icon="https://via.placeholder.com/50"
-        />
-        <Feature
-          title="Feature 3"
-          description="This is the third amazing feature."
-          icon="https://via.placeholder.com/5
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;

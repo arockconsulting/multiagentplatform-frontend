@@ -1,79 +1,80 @@
 ```typescript
 // src/App.tsx
 import React from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 /**
- * Interface for the App component props.
+ * Global Styles using Styled Components
  */
-interface AppProps {
-  /**
-   * A greeting message.
-   */
-  greeting?: string;
-}
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+  }
+`;
 
 /**
- * Main container for the application.
+ * Styled Component for the main App container
  */
 const AppContainer = styled.div`
   text-align: center;
   padding: 20px;
-  font-family: sans-serif;
 `;
 
 /**
- * Heading for the landing page.
+ * Styled Component for the App header
  */
-const AppHeader = styled.h1`
-  color: #333;
-`;
-
-/**
- * Paragraph describing the landing page.
- */
-const AppParagraph = styled.p`
-  color: #666;
-  line-height: 1.6;
-`;
-
-/**
- * A styled button component.
- */
-const StyledButton = styled.button`
-  background-color: #4CAF50; /* Green */
-  border: none;
+const AppHeader = styled.header`
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: #3e8e41;
-  }
 `;
 
+/**
+ * Styled Component for the App link
+ */
+const AppLink = styled.a`
+  color: #61dafb;
+`;
 
 /**
- * The main App component.
- * @param {AppProps} props - The component props.
- * @returns {JSX.Element} - The rendered component.
+ * Interface for the App component's props (currently empty)
  */
-const App: React.FC<AppProps> = ({ greeting = 'Welcome' }) => {
+interface AppProps {}
+
+/**
+ * Main App Component
+ * @returns JSX.Element - The rendered App component
+ */
+const App: React.FC<AppProps> = () => {
   return (
-    <AppContainer>
-      <AppHeader>{greeting} to My Awesome Landing Page</AppHeader>
-      <AppParagraph>
-        This is a simple landing page built with React, TypeScript, and Styled Components.
-        Feel free to explore and customize it!
-      </AppParagraph>
-      <StyledButton>Learn More</StyledButton>
-    </AppContainer>
+    <>
+      <GlobalStyle />
+      <AppContainer>
+        <AppHeader>
+          <h1>
+            Welcome to React with TypeScript and Styled Components!
+          </h1>
+          <p>
+            Edit <code>src/App.tsx</code> and save to reload.
+          </p>
+          <AppLink
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </AppLink>
+        </AppHeader>
+      </AppContainer>
+    </>
   );
 };
 

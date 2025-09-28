@@ -3,13 +3,55 @@
 import { createGlobalStyle } from 'styled-components';
 
 /**
- * GlobalStyles component using styled-components.
- *
- * This component defines global styles for the entire application,
- * including font families, background colors, and resets.
+ * Interface para definir as propriedades de tema.
  */
-const GlobalStyles = createGlobalStyle`
-  /* Reset some basic elements */
+export interface ThemeProps {
+  colors: {
+    primary: string;
+    secondary: string;
+    background: string;
+    text: string;
+    accent: string;
+  };
+  fonts: {
+    primary: string;
+    secondary: string;
+  };
+  breakpoints: {
+    mobile: string;
+    tablet: string;
+    desktop: string;
+  };
+}
+
+/**
+ * Tema padrão da aplicação.
+ */
+export const defaultTheme: ThemeProps = {
+  colors: {
+    primary: '#007bff',
+    secondary: '#6c757d',
+    background: '#f8f9fa',
+    text: '#343a40',
+    accent: '#ffc107',
+  },
+  fonts: {
+    primary: 'Arial, sans-serif',
+    secondary: 'Helvetica, sans-serif',
+  },
+  breakpoints: {
+    mobile: '576px',
+    tablet: '768px',
+    desktop: '992px',
+  },
+};
+
+/**
+ * Estilos globais da aplicação.
+ * Define fontes, cores e reset de estilos.
+ */
+const GlobalStyle = createGlobalStyle<{ theme: ThemeProps }>`
+  /* Reseta estilos padrões do navegador */
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -39,6 +81,9 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     line-height: 1;
+    font-family: ${(props) => props.theme.fonts.primary};
+    background-color: ${(props) => props.theme.colors.background};
+    color: ${(props) => props.theme.colors.text};
   }
 
   ol, ul {
@@ -60,31 +105,20 @@ const GlobalStyles = createGlobalStyle`
     border-spacing: 0;
   }
 
-  /* Custom global styles */
-  body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: bold;
-    margin-bottom: 1rem;
+  /* Estilos gerais */
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
 
   a {
-    color: #007bff;
+    color: ${(props) => props.theme.colors.primary};
     text-decoration: none;
 
     &:hover {
       text-decoration: underline;
     }
   }
-
-  button {
-    cursor: pointer;
-  }
 `;
 
-export default GlobalStyles;
+export default GlobalStyle;
 ```

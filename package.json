@@ -49,177 +49,239 @@
 ```
 
 ```typescript
-// src/components/Button/Button.tsx
-import React from 'react';
-import styled from 'styled-components';
-
-interface ButtonProps {
-  /** Text to display inside the button */
+// src/types/index.ts
+export interface ButtonProps {
+  /** The text to display in the button. */
   children: React.ReactNode;
-  /** Optional click handler */
+  /** The onClick handler for the button. */
   onClick?: () => void;
-  /** Optional ARIA label for accessibility */
-  ariaLabel?: string;
-  /** Optional styling variants */
+  /** Optional styling variant */
   variant?: 'primary' | 'secondary';
 }
 
-const StyledButton = styled.button<Pick<ButtonProps, 'variant'>>`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+export interface HeroProps {
+  title: string;
+  subtitle: string;
+  imageSrc: string;
+  altText: string;
+}
 
-  ${(props) =>
-    props.variant === 'primary' &&
-    `
-    background-color: #007bff;
-    color: white;
+export interface FeatureProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+```
 
-    &:hover {
-      background-color: #0056b3;
-    }
-  `}
-
-  ${(props) =>
-    props.variant === 'secondary' &&
-    `
-    background-color: #6c757d;
-    color: white;
-
-    &:hover {
-      background-color: #5a6268;
-    }
-  `}
-`;
-
+```typescript
+// src/components/Button/Button.tsx
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { ButtonProps } from '../../types';
 
 /**
- * Reusable Button Component
+ * A reusable button component.
  */
-const Button: React.FC<ButtonProps> = ({ children, onClick, ariaLabel, variant = 'primary' }) => {
+const Button: React.FC<ButtonProps> = ({ children, onClick, variant = 'primary' }) => {
   return (
-    <StyledButton onClick={onClick} aria-label={ariaLabel} variant={variant}>
+    <StyledButton onClick={onClick} variant={variant}>
       {children}
     </StyledButton>
   );
 };
 
+interface StyledButtonProps {
+  variant: 'primary' | 'secondary';
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+
+  ${({ variant }) =>
+    variant === 'primary'
+      ? css`
+          background-color: #007bff;
+          color: white;
+
+          &:hover {
+            background-color: #0056b3;
+          }
+        `
+      : css`
+          background-color: #6c757d;
+          color: white;
+
+          &:hover {
+            background-color: #545b62;
+          }
+        `}
+`;
+
 export default Button;
 ```
 
 ```typescript
-// src/components/HeroSection/HeroSection.tsx
+// src/components/Hero/Hero.tsx
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../Button/Button';
-
-interface HeroSectionProps {
-  title: string;
-  subtitle: string;
-  buttonText: string;
-  onButtonClick?: () => void;
-}
-
-const StyledHeroSection = styled.section`
-  background-color: #f8f9fa;
-  padding: 80px 0;
-  text-align: center;
-
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-  }
-
-  p {
-    font-size: 1.5rem;
-    color: #6c757d;
-    margin-bottom: 40px;
-  }
-`;
+import { HeroProps } from '../../types';
 
 /**
- * Hero Section Component
+ * A Hero section component for the landing page.
  */
-const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle, buttonText, onButtonClick }) => {
+const Hero: React.FC<HeroProps> = ({ title, subtitle, imageSrc, altText }) => {
   return (
-    <StyledHeroSection>
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-      <Button onClick={onButtonClick}>{buttonText}</Button>
-    </StyledHeroSection>
+    <HeroContainer>
+      <TextContainer>
+        <h1>{title}</h1>
+        <p>{subtitle}</p>
+      </TextContainer>
+      <ImageContainer>
+        <HeroImage src={imageSrc} alt={altText} />
+      </ImageContainer>
+    </HeroContainer>
   );
 };
 
-export default HeroSection;
+const HeroContainer = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+`;
+
+const TextContainer = styled.div`
+  flex: 1;
+  padding-right: 20px;
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.2em;
+    color: #6c757d;
+  }
+`;
+
+const ImageContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+`;
+
+const HeroImage = styled.img`
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+`;
+
+export default Hero;
+```
+
+```typescript
+// src/components/Feature/Feature.tsx
+import React from 'react';
+import styled from 'styled-components';
+import { FeatureProps } from '../../types';
+
+/**
+ * A Feature component to highlight key features of the product.
+ */
+const Feature: React.FC<FeatureProps> = ({ title, description, icon }) => {
+  return (
+    <FeatureContainer>
+      <IconContainer>{icon}</IconContainer>
+      <h3>{title}</h3>
+      <p>{description}</p>
+    </FeatureContainer>
+  );
+};
+
+const FeatureContainer = styled.div`
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const IconContainer = styled.div`
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #007bff;
+`;
+
+export default Feature;
 ```
 
 ```typescript
 // src/App.tsx
 import React from 'react';
-import styled from 'styled-components';
-import HeroSection from './components/HeroSection/HeroSection';
-
-const AppContainer = styled.div`
-  font-family: sans-serif;
-  text-align: center;
-`;
-
-/**
- * Main App Component
- */
-function App() {
-  const handleButtonClick = () => {
-    alert('Button Clicked!');
-  };
-
-  return (
-    <AppContainer>
-      <HeroSection
-        title="Welcome to Our Awesome Landing Page"
-        subtitle="Your one-stop solution for all your needs."
-        buttonText="Get Started"
-        onButtonClick={handleButtonClick}
-      />
-    </AppContainer>
-  );
-}
-
-export default App;
-```
-
-```typescript
-// src/globalStyles.ts
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+import Hero from './components/Hero/Hero';
+import Feature from './components/Feature/Feature';
+import Button from './components/Button/Button';
+import { FaReact, FaCode, FaCheckCircle } from 'react-icons/fa';
 
 const GlobalStyle = createGlobalStyle`
   body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
 `;
 
-export default GlobalStyle;
-```
+const AppContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+`;
 
-```typescript
-// src/index.tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import GlobalStyle from './globalStyles';
+const FeaturesSection = styled.section`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+`;
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <GlobalStyle />
-    <App />
-  </React.StrictMode>
-);
-```
+const Footer = styled.footer`
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #ddd;
+`;
+
+/**
+ * Main application component for the landing page.
+ */
+function App() {
+  return (
+    <>
+      <GlobalStyle />
+      <AppContainer>
+        <Hero
+          title="Welcome to Our Awesome Product"
+          subtitle="The best solution for your needs."
+          imageSrc="https://via.placeholder.com/800x400"
+          altText="Product image"
+        />
+
+        <FeaturesSection>
+          <Feature
+            title="Feature 
