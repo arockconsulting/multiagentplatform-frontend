@@ -1,0 +1,288 @@
+```typescript
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
+```
+```typescript
+// src/components/Button/Button.tsx
+import React from 'react';
+import styled from 'styled-components';
+
+interface ButtonProps {
+  /** The text to display in the button. */
+  children: React.ReactNode;
+  /** Optional click handler. */
+  onClick?: () => void;
+  /** Optional styling variants. */
+  variant?: 'primary' | 'secondary';
+  /** Optional ARIA label for accessibility. */
+  ariaLabel?: string;
+}
+
+const StyledButton = styled.button<ButtonProps>`
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+
+  ${(props) =>
+    props.variant === 'primary' &&
+    `
+      background-color: #007bff;
+      color: white;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    `}
+
+  ${(props) =>
+    props.variant === 'secondary' &&
+    `
+      background-color: #6c757d;
+      color: white;
+
+      &:hover {
+        background-color: #5a6268;
+      }
+    `}
+`;
+
+/**
+ * A reusable button component.
+ */
+const Button: React.FC<ButtonProps> = ({
+  children,
+  onClick,
+  variant = 'primary',
+  ariaLabel,
+}) => {
+  return (
+    <StyledButton onClick={onClick} variant={variant} aria-label={ariaLabel}>
+      {children}
+    </StyledButton>
+  );
+};
+
+export default Button;
+```
+```typescript
+// src/components/Hero/Hero.tsx
+import React from 'react';
+import styled from 'styled-components';
+
+interface HeroProps {
+  /** The title of the hero section. */
+  title: string;
+  /** The subtitle or description of the hero section. */
+  subtitle: string;
+  /** Optional background image URL. */
+  backgroundImage?: string;
+}
+
+const HeroContainer = styled.div<HeroProps>`
+  background-image: ${(props) =>
+    props.backgroundImage ? `url(${props.backgroundImage})` : 'none'};
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional overlay */
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 3em;
+  margin-bottom: 20px;
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.5em;
+  margin-bottom: 30px;
+`;
+
+/**
+ * A hero section component for landing pages.
+ */
+const Hero: React.FC<HeroProps> = ({ title, subtitle, backgroundImage }) => {
+  return (
+    <HeroContainer backgroundImage={backgroundImage}>
+      <Title>{title}</Title>
+      <Subtitle>{subtitle}</Subtitle>
+    </HeroContainer>
+  );
+};
+
+export default Hero;
+```
+```typescript
+// src/components/Feature/Feature.tsx
+import React from 'react';
+import styled from 'styled-components';
+
+interface FeatureProps {
+  /** The title of the feature. */
+  title: string;
+  /** The description of the feature. */
+  description: string;
+  /** Optional icon or image URL. */
+  icon?: string;
+}
+
+const FeatureContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+`;
+
+const Icon = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+`;
+
+const Title = styled.h3`
+  font-size: 1.5em;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.p`
+  font-size: 1em;
+`;
+
+/**
+ * A feature component for highlighting key features.
+ */
+const Feature: React.FC<FeatureProps> = ({ title, description, icon }) => {
+  return (
+    <FeatureContainer>
+      {icon && <Icon src={icon} alt={title} />}
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+    </FeatureContainer>
+  );
+};
+
+export default Feature;
+```
+```typescript
+// src/components/Footer/Footer.tsx
+import React from 'react';
+import styled from 'styled-components';
+
+const FooterContainer = styled.footer`
+  background-color: #343a40;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9em;
+`;
+
+/**
+ * A simple footer component.
+ */
+const Footer: React.FC = () => {
+  return (
+    <FooterContainer>
+      &copy; {new Date().getFullYear()} My Company. All rights reserved.
+    </FooterContainer>
+  );
+};
+
+export default Footer;
+```
+```typescript
+// src/App.tsx
+import React from 'react';
+import styled from 'styled-components';
+import Hero from 'components/Hero/Hero';
+import Feature from 'components/Feature/Feature';
+import Footer from 'components/Footer/Footer';
+import Button from 'components/Button/Button';
+
+const AppContainer = styled.div`
+  font-family: sans-serif;
+`;
+
+const FeaturesSection = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+`;
+
+const StyledButton = styled(Button)`
+  margin-top: 20px;
+`;
+
+/**
+ * The main application component.
+ */
+const App: React.FC = () => {
+  return (
+    <AppContainer>
+      <Hero
+        title="Welcome to Our Awesome Product"
+        subtitle="The best solution for your needs."
+        backgroundImage="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      />
+
+      <FeaturesSection>
+        <Feature
+          title="Feature 1"
+          description="This is the first amazing feature."
+          icon="https://via.placeholder.com/50"
+        />
+        <Feature
+          title="Feature 2"
+          description="This is the second amazing feature."
+          icon="https://via.placeholder.com/50"
+        />
+        <Feature
+          title="Feature 3"
+          description="This is the third amazing feature."
+          icon="https://via.placeholder.com/5
