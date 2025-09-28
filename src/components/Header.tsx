@@ -5,146 +5,50 @@ import styles from './Header.module.css';
 
 interface HeaderProps {
   /**
-   * The application name to display in the header.
+   * The title of the header.
    */
-  appName: string;
+  title: string;
   /**
-   * Navigation links to display in the header.
+   * An optional className to apply custom styles.
    */
-  navLinks: { text: string; href: string }[];
-  /**
-   * Text for the action button.
-   */
-  actionButtonText: string;
-  /**
-   * Callback function for when the action button is clicked.
-   */
-  onActionButtonClick: () => void;
+  className?: string;
 }
 
 /**
- * Header component for the landing page.
- * Displays the logo, navigation links, and an action button.
+ * A functional component representing the header of the landing page.
+ * It includes accessibility features for keyboard navigation and screen readers.
+ *
+ * @param {HeaderProps} props - The component's props.
+ * @returns {JSX.Element} The rendered header element.
  */
-const Header: React.FC<HeaderProps> = ({
-  appName,
-  navLinks,
-  actionButtonText,
-  onActionButtonClick,
-}) => {
+const Header: React.FC<HeaderProps> = ({ title, className }) => {
   return (
-    <header className={styles.header}>
-      <div className={styles.logo}>
-        <a href="/" aria-label="Go to homepage">
-          {appName}
-        </a>
-      </div>
-
-      <nav className={styles.navigation}>
+    <header className={`${styles.header} ${className || ''}`} role="banner">
+      <h1 className={styles.title} aria-level={1}>
+        {title}
+      </h1>
+      <nav className={styles.nav} aria-label="Main Navigation">
         <ul className={styles.navList}>
-          {navLinks.map((link) => (
-            <li key={link.text} className={styles.navItem}>
-              <a href={link.href} className={styles.navLink}>
-                {link.text}
-              </a>
-            </li>
-          ))}
+          <li className={styles.navItem}>
+            <a href="#about" className={styles.navLink} aria-label="Go to About section" tabIndex={0}>
+              About
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a href="#services" className={styles.navLink} aria-label="Go to Services section" tabIndex={0}>
+              Services
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a href="#contact" className={styles.navLink} aria-label="Go to Contact section" tabIndex={0}>
+              Contact
+            </a>
+          </li>
         </ul>
       </nav>
-
-      <div className={styles.action}>
-        <button className={styles.actionButton} onClick={onActionButtonClick}>
-          {actionButtonText}
-        </button>
-      </div>
     </header>
   );
 };
 
 export default Header;
-```
-```css
-/* src/components/Header.module.css */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #f0f0f0;
-}
-
-.logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-
-.navigation {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.navList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: inline-block; /* Ensure the list takes only the space it needs */
-}
-
-.navItem {
-  display: inline;
-  margin: 0 1rem;
-}
-
-.navLink {
-  text-decoration: none;
-  color: #555;
-  font-weight: 500;
-}
-
-.actionButton {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.actionButton:hover {
-  background-color: #0056b3;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .logo {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .navigation {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .navList {
-    display: block; /* Stack the list items */
-  }
-
-  .navItem {
-    display: block; /* Stack the list items */
-    margin: 0.5rem 0;
-  }
-
-  .action {
-    text-align: center;
-  }
-}
 ```
